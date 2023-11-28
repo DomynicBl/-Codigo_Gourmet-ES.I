@@ -17,16 +17,7 @@
 
 <body>
 
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-          <div class="vw-plugin-top-wrapper"></div>
-        </div>
-      </div>
-      <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-      <script>
-        new window.VLibras.Widget();
-      </script>
+
 
    <!--Cabeçalho-->
    <div class="header" id="header">
@@ -55,11 +46,9 @@
     
     <div class="order-options">
         <h2>Itens do seu pedido</h2>
-        <p>- 2x Pizza de Calabresa(G)</p>
-        <p>- 1x Pizza de Prestigío(P)</p>
-        <p>- 3x Grarana(Lata)</p>
-            <h3>Frete: R$ 10,00</h3>
-            <h3>Total: R$ 100,00</h3>
+
+            <h3 id="frete">Frete: R$ 10,00</h3>
+            <h3 id="preco"></h3>
         <div class="payment-options">
             <h2>Insira os dados de Pagamento</h2>
             <!--<input type="radio" name="payment" id="payment1" value="1">
@@ -287,6 +276,17 @@
         </div>
     </div>
 
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+          <div class="vw-plugin-top-wrapper"></div>
+        </div>
+      </div>
+      <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+      <script>
+        new window.VLibras.Widget();
+      </script>
+
     <div id="footer_copyright">
         &#169
         2023 all rights reserved
@@ -295,6 +295,58 @@
 <!--Fim - Rodape-->
 
  <script>
+     let preco = 0;
+     let pedido = JSON.parse(localStorage.getItem('pedido'));
+     let itens = document.querySelector(".order-options");
+
+     document.querySelector("#Button_Finalizar_Pedido").addEventListener('click', () => {
+         let nome = document.querySelector("#name").value;
+         let numCartao = document.querySelector("#cardnumber").value
+         let validade = document.querySelector("#expirationdate").value;
+         let secureCode = document.querySelector("#securitycode").value
+         
+         if(!nome || !numCartao || !validade || !secureCode){
+             alert('Preencha todos os campos do cartão');
+         }else{
+            let historico = localStorage.getItem('historicoPedidos');
+            historico = JSON.parse(historico);
+            if(historico == null){
+                historico = [];
+            }else{
+                historico.push(pedido);
+            }
+
+
+            localStorage.setItem('historicoPedidos', JSON.stringify(historico));
+             localStorage.setItem('pedido', '');
+             window.location.href = 'Index.html';
+         }
+     })
+
+    let title = document.querySelector("#frete");
+    Object.values(pedido).forEach(x => {
+        x.forEach(item => {
+            let tempItem = "";
+            if(item.tamanho){
+                tempItem = `- ${item.quantidade}x ${ item.nome}(${item.tamanho})`;
+                if(item.tamanho == 'P'){
+                    preco += 20 * item.quantidade;
+                }else if(item.tamanho == 'G'){
+                    preco += 30 * item.quantidade;
+                }else{
+                    preco += 40 * item.quantidade;
+                }
+            }else{
+                tempItem = `- ${item.quantidade}x ${ item.nome}`;
+                preco += 10 * item.quantidade;
+            }
+        let p = document.createElement('p');
+        p.textContent = tempItem;
+        itens.insertBefore(p, title);
+        document.querySelector("#preco").textContent ="Total: R$ " + preco + ".00";
+    })
+})
+
     document.addEventListener('DOMContentLoaded', function () {
         // Adiciona um ouvinte de mudança aos botões de rádio
         var paymentOptions = document.getElementsByName('payment');

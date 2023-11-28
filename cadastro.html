@@ -23,18 +23,8 @@
 
 <body>
 
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
-    </div>
-    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-    <script>
-        new window.VLibras.Widget();
-    </script>
 
-    <form action="" method="POST" id="usersForm">
+    <form id="usersForm">
         <div class="main_cadastro">
             <div class="area_cadastro">
                 <div class="card_cadastro">
@@ -84,6 +74,8 @@
             </div>
         </div>
     </form>
+
+
     <!--Fim - Cadastro-->
 
     <!--
@@ -109,6 +101,46 @@
 
     <!------------------------------------------------------------------------------------>
 
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget();
+    </script>
+
+    <script>
+        if(localStorage.getItem('usuario')){
+            window.location.href = 'Index.html';
+        }
+
+        document.querySelector("#usersForm > div > div > div > button").addEventListener('click', () => {
+            let nome = document.querySelector("#nome").value;
+            let cpf = document.querySelector("#cpf").value;
+            let email = document.querySelector("#login").value;
+            let senha = document.querySelector("#senha").value;
+            let celular = document.querySelector("#telefone").value;
+            let endereco = document.querySelector("#endereco").value;
+            
+            if(!nome || !cpf || !email || !senha || !celular || !endereco){
+                alert("Preencha todos os campo!");
+            }else{
+                let cadastro = {
+                    nome: nome,
+                    cpf: cpf,
+                    email: email,
+                    senha: senha,
+                    telefone: celular,
+                    endereco: endereco
+                }
+                localStorage.setItem('usuario', JSON.stringify(cadastro));
+            }
+        })
+    </script>
 </body>
 
 </html>

@@ -27,7 +27,7 @@
     new window.VLibras.Widget();
   </script>
 
-<form action="http://localhost:6793/usuario" method="GET" id="searchLogin">
+<form id="searchLogin">
   <div class="main_login">
     <div class="area_login">
       <div class="card_login">
@@ -37,15 +37,14 @@
         </a>
   
         <div class="campos_login">
-          <form id="register-form" action=""></form>
           <label for="email">Email</label>
-          <input type="email" id="login" name="login" placeholder="Digite seu email">
+          <input type="email" id="login" name="login" placeholder="Digite seu email" required>
         </div>
         <div class="campos_login">
           <label for="lastname">Senha</label>
-          <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
+          <input type="password" name="senha" id="senha" placeholder="Digite sua senha" required>
         </div>
-        <button class="btn_login" type="submit" onclick="logado">Enviar</button>
+        <button class="btn_login" type="submit" onclick="logado()">Enviar</button>
         <div class="cadastro">
           <a href="cadastro.html">Não possui conta? Cadastre-se</a>
         </div>
@@ -67,17 +66,27 @@
         
     </form>
     
-
+  -->
     <script>
-        function logado() {
-            const form = document.getElementById("searchLogin");
-            var formData = new FormData(form);
-            var idDigitado = formData.get("login", "senha"); // Usando o novo campo de entrada
+        if(localStorage.getItem('usuario')){
+          window.location.href = 'Index.html';
+        }
 
-            window.location.href = "http://localhost:6793/index.html";
+        function logado() {
+          let email = document.querySelector("#login").value;
+          let senha = document.querySelector("#senha").value;
+          if(!email || !senha){
+              alert('Preecha todos os campo');
+          }else{
+            let user = {
+              email:email,
+              senha: senha
+            }
+            localStorage.setItem('usuario', JSON.stringify(user));
+          }
         }
     </script>
-    -->
+    
 
 </body>
 </html>
