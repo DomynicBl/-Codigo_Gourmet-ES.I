@@ -184,3 +184,18 @@ a:hover {
     margin: 25px auto; /* Centralizar horizontalmente usando 'auto' no lado direito e esquerdo */
     cursor: pointer;
 }
+
+.cartao, .pix {
+    display: none;
+}
+
+.cartao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-options h2 {
+    text-align: center;
+    margin-top: 100px;
+}
